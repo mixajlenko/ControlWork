@@ -31,6 +31,6 @@ public interface IUserCommandProcessor {
      * @param command команда которую ввел пользователь
      * @param userInputReader объект Scanner который будет использоватеься для чтения дополнительных параметров.
      */
-    String processUserCommand(String command, Scanner userInputReader);
+    String processUserCommand(String command, Scanner userInputReader) throws InterruptedException;
 
 }

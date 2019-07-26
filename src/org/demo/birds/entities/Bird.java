@@ -1,5 +1,7 @@
 package org.demo.birds.entities;
 
+import java.util.Objects;
+
 /**
  * Bird.
  *
@@ -12,6 +14,8 @@ package org.demo.birds.entities;
  */
 public class Bird {
 
+    private int id;
+
     private String name;
 
     private String livingArea;
@@ -20,7 +24,8 @@ public class Bird {
 
     @Override
     public String toString() {
-        return "\nname - '" + name + '\'' +
+        return "\nid - '" + id + '\'' +
+                ", name - '" + name + '\'' +
                 ", livingArea - '" + livingArea + '\'' +
                 ", size - " + size;
     }
@@ -43,6 +48,14 @@ public class Bird {
 
     public void setSize(Double size) {
         this.size = size;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
 }

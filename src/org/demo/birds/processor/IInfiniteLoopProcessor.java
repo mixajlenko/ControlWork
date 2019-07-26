@@ -12,5 +12,5 @@ public interface IInfiniteLoopProcessor {
      * 2) пользователь вводит комманду.
      *
      */
-    void processInLoop();
+    void processInLoop() throws InterruptedException;
 }

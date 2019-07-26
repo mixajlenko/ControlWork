@@ -2,6 +2,7 @@
 package org.demo.birds.store;
 
 import org.demo.birds.entities.Bird;
+import org.demo.birds.processor.BirdThreads;
 
 import java.util.*;
 
@@ -14,10 +15,13 @@ public class BirdStore extends AbstractBirdStore {
 
     private static BirdStore instance;
 
+    BirdThreads birds = new BirdThreads("first");
+
     private List<Bird> listLivingArea = new ArrayList<>();
 
-    private Map<String, Bird> birdStore1 = new HashMap<String, Bird>();
+    private Map<String, Bird> birdStore1 = new HashMap<>();
 
+    private Map<String, Integer> ids = new HashMap();
 
     private BirdStore() {
     }
@@ -29,10 +33,21 @@ public class BirdStore extends AbstractBirdStore {
         return instance;
     }
 
-    @Override
-    public void addBird(Bird b) {
-        birdStore1.put(b.getName(), b);
+    public List<Bird> getListLivingArea() {
+        return listLivingArea;
     }
+
+    @Override
+    public synchronized void addBird(Bird b) {
+            if (!ids.containsValue(b.getId())) {
+                birdStore1.put(b.getName(), b);
+                System.out.println("Bird is created");
+                ids.put(b.getName(), b.getId());
+            } else {
+                System.out.println("Bird with such ID already exist, try again.");
+                Thread.yield();
+            }
+        }
 
     @Override
     public Bird searchByName(String nameToSearch) {
@@ -56,9 +71,17 @@ public class BirdStore extends AbstractBirdStore {
         return listLivingArea;
     }
 
-    public List<Bird> getListLivingArea() {
-        return listLivingArea;
+    public synchronized void removeBird(String name) {
+        if (!birdStore1.containsKey(name)) {
+            System.out.println("Bird not found");
+            Thread.yield();
+        } else {
+            birdStore1.remove(name);
+            ids.remove(name);
+            System.out.println("Bird " + name + " was deleted");
+        }
     }
 }
+
 
 

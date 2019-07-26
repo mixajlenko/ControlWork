@@ -10,19 +10,27 @@ import java.util.Scanner;
 /**
  * Реализовать интерфейсы IBirdCreator, IUserCommandProcessor, IInfiniteLoopProcessor
  */
-public class UserCommandProcessor implements IBirdCreator, IUserCommandProcessor, IInfiniteLoopProcessor {
+public class UserCommandProcessor extends BirdThreads implements IBirdCreator, IUserCommandProcessor, IInfiniteLoopProcessor{
 
     private boolean workСycle = true;
+
+    public UserCommandProcessor(String name) {
+        super(name);
+    }
+
     @Override
     public Bird createBird(Scanner userInputReader) {
         Bird bird = new Bird();
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Please enter bird id");
+        bird.setId(userInputReader.nextInt());
         System.out.println("Please, enter bird name");
-        bird.setName(userInputReader.nextLine());
+        bird.setName(scan.nextLine());
         System.out.println("Please, enter bird living area");
-        bird.setLivingArea(userInputReader.nextLine());
+        bird.setLivingArea(scan.nextLine());
         System.out.println(" Please, enter bird size");
         try {
-            bird.setSize(userInputReader.nextDouble());
+            bird.setSize(scan.nextDouble());
         }catch (InputMismatchException a) {
             System.out.println("!!!The object is not created. The length is not correct");
         }
@@ -37,6 +45,7 @@ public class UserCommandProcessor implements IBirdCreator, IUserCommandProcessor
                     "     *      a - add new Bird\n" +
                     "     *      s - search bird by name\n" +
                     "     *      l - search bird by living area\n" +
+                    "     *      r - remove bird\n" +
                     "     *      exit - terminate application");
             String a = k.nextLine();
             processUserCommand(a, k);
@@ -51,6 +60,11 @@ public class UserCommandProcessor implements IBirdCreator, IUserCommandProcessor
             case "a":
                 BirdStore.getInstance().addBird(createBird(userInputReader));
                 break;
+            case "r":
+                System.out.println("Please, enter bird name which you want delete");
+                String nameToDelete = userInputReader.nextLine();
+                BirdStore.getInstance().removeBird(nameToDelete);
+                break;
             case "s":
                 System.out.println("Please, enter bird name to search");
                 String nameToSearch = userInputReader.nextLine();
@@ -61,6 +75,7 @@ public class UserCommandProcessor implements IBirdCreator, IUserCommandProcessor
                 }
                 break;
             case "l":
+
                 System.out.println("Please, enter bird living area to search");
                 String livingAreaToFind = userInputReader.nextLine();
 
